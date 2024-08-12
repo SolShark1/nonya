@@ -6,8 +6,8 @@ from telegram.ext import Application
 nest_asyncio.apply()
 
 async def main():
-    # Initialize your application here (customize as needed)
-    application = Application.builder().token(7252679351:AAEkl36rnO2lQyipW3ZL5uXrQTH4l5o82ac).build()
+    # Replace with your actual bot token enclosed in quotes
+    application = Application.builder().token("7252679351:AAEkl36rnO2lQyipW3ZL5uXrQTH4l5o82ac").build()
 
     # Run the bot with polling
     await application.run_polling()
