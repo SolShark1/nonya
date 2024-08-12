@@ -13,6 +13,6 @@ async def main():
     await application.run_polling()
 
 # Entry point for the script
-if name == "__main__":
+if __name__ == "__main__":
     # This will start the event loop and run the main coroutine
     asyncio.run(main())
