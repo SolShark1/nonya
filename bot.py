@@ -38,7 +38,7 @@ ASK_WALLET_ADDRESS = range(1)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Start the conversation and ask the user for their Solana wallet address."""
-    await update.message.reply_text("Welcome to the Tap to Make J. Bunny Kiss Boozy game! Please enter your Solana wallet address to start:")
+    await update.message.reply_text("Welcome to the Tap to Make J. Bunny Kiss Boosey game! Please enter your Solana wallet address to start:")
     return ASK_WALLET_ADDRESS
 
 async def ask_wallet_address(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -53,7 +53,7 @@ async def ask_wallet_address(update: Update, context: ContextTypes.DEFAULT_TYPE)
             'wallet_address': user_wallet_address,
             'taps': 0
         }
-        await update.message.reply_text("Thank you! Now, start tapping. Tap 10 times to make J. Bunny kiss Boozy!")
+        await update.message.reply_text("Thank you! Now, start tapping. Tap 10 times to make J. Bunny kiss Boosey!")
         return ConversationHandler.END
     except Exception as e:
         await update.message.reply_text("That doesn't seem like a valid Solana wallet address. Please try again.")
@@ -73,10 +73,10 @@ async def tap(update: Update, context: ContextTypes.DEFAULT_TYPE):
     taps_remaining = 10 - user_data[user_id]['taps']
 
     if taps_remaining > 0:
-        await update.message.reply_text(f"You've tapped! {taps_remaining} more taps to make J. Bunny kiss Boozy!")
+        await update.message.reply_text(f"You've tapped! {taps_remaining} more taps to make J. Bunny kiss Boosey!")
     else:
         await update.message.reply_photo(photo=InputFile('Jbunny_kissing_boosey.png'),
-                                         caption="J. Bunny kissed Boozy! You've earned 10 J. Bunny tokens!")
+                                         caption="J. Bunny kissed Boosey! You've earned 10 J. Bunny tokens!")
         # Reset user progress
         user_data[user_id]['taps'] = 0
         # Transfer tokens to the user's wallet
