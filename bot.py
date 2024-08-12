@@ -64,7 +64,7 @@ async def main():
     # Run the bot until Ctrl+C is pressed
     await application.run_polling()
 
-if name == '__main__':
+if __name__ == '__main__':
     # Check if the event loop is already running
     try:
         asyncio.run(main())
