@@ -125,4 +125,4 @@ def main():
     application.run_polling()
 
 if __name__ == "__main__":
-    asyncio.run(main()python bot.python
+    asyncio.run(main())python bot.python
