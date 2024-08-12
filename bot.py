@@ -1,6 +1,6 @@
 import os
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -13,11 +13,11 @@ REWARD_AMOUNT = int(os.getenv("REWARD_AMOUNT"))
 # Create a dictionary to track user taps
 user_taps = {}
 
-def start(update: Update, context: CallbackContext):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_taps[user_id] = 0
     
-    update.message.reply_photo(
+    await update.message.reply_photo(
         photo=open('images/jbunny.png', 'rb'),
         caption="Tap the button 10 times to make JBunny kiss Boosey!",
         reply_markup=InlineKeyboardMarkup([
@@ -25,7 +25,7 @@ def start(update: Update, context: CallbackContext):
         ])
     )
 
-def tap(update: Update, context: CallbackContext):
+async def tap(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     user_id = query.from_user.id
 
@@ -35,10 +35,10 @@ def tap(update: Update, context: CallbackContext):
     user_taps[user_id] += 1
 
     if user_taps[user_id] < 10:
-        query.answer(f"{user_taps[user_id]} taps! Keep going!")
+        await query.answer(f"{user_taps[user_id]} taps! Keep going!")
     else:
-        query.answer("JBunny is kissing Boosey! You've earned your reward!")
-        query.edit_message_media(
+        await query.answer("JBunny is kissing Boosey! You've earned your reward!")
+        await query.edit_message_media(
             media=open('images/jbunny_kissing_boosey.png', 'rb'),
             reply_markup=None
         )
@@ -52,16 +52,17 @@ def send_tokens(user_id):
     # This is a placeholder; integrate with your blockchain logic
     print(f"Sending {REWARD_AMOUNT} tokens to user {user_id}!")
 
-def main():
-    # Use Updater without 'use_context'
-    updater = Updater(TELEGRAM_TOKEN)
-    dp = updater.dispatcher
+async def main():
+    # Create the Application
+    application = Application.builder().token(TELEGRAM_TOKEN).build()
 
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CallbackQueryHandler(tap, pattern="^tap$"))
+    # Add handlers
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CallbackQueryHandler(tap, pattern="^tap$"))
 
-    updater.start_polling()
-    updater.idle()
+    # Run the bot until Ctrl+C is pressed
+    await application.run_polling()
 
-if __name__ == '__main__':
-    main()
+if name == '__main__':
+    import asyncio
+    asyncio.run(main())
