@@ -95,7 +95,9 @@ async def transfer_tokens(user_wallet_address: PublicKey):
                 lamports=transfer_amount,
             )
         )
-    )response = await solana_client.send_transaction(
+    )
+    
+    response = await solana_client.send_transaction(
         txn,
         wallet_keypair,
         opts=TxOpts(skip_preflight=True),
