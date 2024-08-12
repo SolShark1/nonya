@@ -1,4 +1,5 @@
 import os
+import asyncio
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 from dotenv import load_dotenv
@@ -63,6 +64,13 @@ async def main():
     # Run the bot until Ctrl+C is pressed
     await application.run_polling()
 
-if __name__ == '__main__':
-    import asyncio
-    asyncio.run(main())
+if name == '__main__':
+    # Check if the event loop is already running
+    try:
+        asyncio.run(main())
+    except RuntimeError as e:
+        if str(e).startswith("This event loop is already running"):
+            loop = asyncio.get_event_loop()
+            loop.create_task(main())
+        else:
+            raise
