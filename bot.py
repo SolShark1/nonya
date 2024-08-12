@@ -1,76 +1,18 @@
-import os
 import asyncio
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
-from dotenv import load_dotenv
+import nest_asyncio
+from telegram.ext import Application
 
-# Load environment variables
-load_dotenv()
-
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-WALLET_PRIVATE_KEY = os.getenv("WALLET_PRIVATE_KEY")
-REWARD_AMOUNT = int(os.getenv("REWARD_AMOUNT"))
-
-# Create a dictionary to track user taps
-user_taps = {}
-
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    user_taps[user_id] = 0
-    
-    await update.message.reply_photo(
-        photo=open('images/jbunny.png', 'rb'),
-        caption="Tap the button 10 times to make JBunny kiss Boosey!",
-        reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("Tap to Kiss!", callback_data="tap")]
-        ])
-    )
-
-async def tap(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    user_id = query.from_user.id
-
-    if user_id not in user_taps:
-        user_taps[user_id] = 0
-
-    user_taps[user_id] += 1
-
-    if user_taps[user_id] < 10:
-        await query.answer(f"{user_taps[user_id]} taps! Keep going!")
-    else:
-        await query.answer("JBunny is kissing Boosey! You've earned your reward!")
-        await query.edit_message_media(
-            media=open('images/jbunny_kissing_boosey.png', 'rb'),
-            reply_markup=None
-        )
-        
-        # Call the function to send tokens
-        send_tokens(user_id)
-        user_taps[user_id] = 0  # Reset taps for the user
-
-def send_tokens(user_id):
-    # Logic to send tokens using WALLET_PRIVATE_KEY and REWARD_AMOUNT
-    # This is a placeholder; integrate with your blockchain logic
-    print(f"Sending {REWARD_AMOUNT} tokens to user {user_id}!")
+# Apply nest_asyncio to allow running the event loop in environments where it's already running
+nest_asyncio.apply()
 
 async def main():
-    # Create the Application
-    application = Application.builder().token(TELEGRAM_TOKEN).build()
+    # Initialize your application here (customize as needed)
+    application = Application.builder().token("YOUR_BOT_TOKEN").build()
 
-    # Add handlers
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CallbackQueryHandler(tap, pattern="^tap$"))
-
-    # Run the bot until Ctrl+C is pressed
+    # Run the bot with polling
     await application.run_polling()
 
-if __name__ == '__main__':
-    # Check if the event loop is already running
-    try:
-        asyncio.run(main())
-    except RuntimeError as e:
-        if str(e).startswith("This event loop is already running"):
-            loop = asyncio.get_event_loop()
-            loop.create_task(main())
-        else:
-            raise
+# Entry point for the script
+if name == "__main__":
+    # This will start the event loop and run the main coroutine
+    asyncio.run(main())
