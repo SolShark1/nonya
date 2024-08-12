@@ -53,7 +53,8 @@ def send_tokens(user_id):
     print(f"Sending {REWARD_AMOUNT} tokens to user {user_id}!")
 
 def main():
-    updater = Updater(TELEGRAM_TOKEN, use_context=True)
+    # Use Updater without 'use_context'
+    updater = Updater(TELEGRAM_TOKEN)
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
