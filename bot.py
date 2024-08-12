@@ -38,7 +38,7 @@ ASK_WALLET_ADDRESS = range(1)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Start the conversation and ask the user for their Solana wallet address."""
-    await update.message.reply_text("Welcome to the Tap to Make J. Bunny Kiss Boosey game! Please enter your Solana wallet address to start:")
+    await update.message.reply_text("Welcome to the Tap to Make J. Bunny Kiss Boozy game! Please enter your Solana wallet address to start:")
     return ASK_WALLET_ADDRESS
 
 async def ask_wallet_address(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -124,5 +124,5 @@ def main():
     # Run the bot with polling
     application.run_polling()
 
-if name == "__main__":
+if __name__ == "__main__":
     asyncio.run(main())
